@@ -70,11 +70,11 @@ The project uses a Star Schema optimized for analytical queries.
 
 - FACT_ORDERS
 
-## Dimension Tables
+### Dimension Tables
 
 - DIM_CUSTOMER
 - DIM_PRODUCT
-- DIM_TIME
+- DIM_ORDER_ITEMS
 
 ---
 
