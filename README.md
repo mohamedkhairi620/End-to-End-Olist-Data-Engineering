@@ -2,13 +2,16 @@
 
 This project demonstrates an end-to-end Big Data ETL Pipeline for processing large-scale e-commerce data using modern Data Engineering tools.
 
-The pipeline automates the complete workflow from raw JSON ingestion to cloud data warehousing using a Medallion Architecture (Bronze, Silver, Gold).
+The pipeline automates the complete workflow from data generation to cloud data warehousing using a Medallion Architecture (Bronze, Silver, Gold).
 
 ---
 
 # System Architecture
 
 The pipeline follows a scalable Lakehouse Architecture divided into multiple layers:
+
+### Data Generation
+A Python-based simulator generates mock e-commerce transaction data in JSON format.
 
 ### Data Ingestion (Bronze Layer)
 Raw JSON files are ingested into Hadoop HDFS using Apache Spark.
@@ -24,6 +27,29 @@ Final analytical tables are loaded into Snowflake Cloud Data Warehouse using the
 
 ### Workflow Orchestration
 Apache Airflow automates and schedules the entire ETL pipeline.
+
+---
+
+# Pipeline Workflow
+
+```text
+Data Simulator
+      │
+      ▼
+Raw JSON Data
+      │
+      ▼
+Bronze Layer (HDFS)
+      │
+      ▼
+Silver Layer (Feature Engineering)
+      │
+      ▼
+Gold Layer (Star Schema)
+      │
+      ▼
+Snowflake Data Warehouse
+```
 
 ---
 
@@ -58,26 +84,6 @@ The project uses a Star Schema optimized for analytical queries.
 
 ---
 
-# Pipeline Workflow
-
-```text
-Raw JSON Data
-      │
-      ▼
-Bronze Layer (HDFS)
-      │
-      ▼
-Silver Layer (Feature Engineering)
-      │
-      ▼
-Gold Layer (Star Schema)
-      │
-      ▼
-Snowflake Data Warehouse
-```
-
----
-
 # Airflow DAG Workflow
 
 The pipeline is orchestrated using Apache Airflow with the following tasks:
@@ -96,13 +102,28 @@ The pipeline is orchestrated using Apache Airflow with the following tasks:
 project-root/
 │
 ├── dags/
+│
+├── simulator/
+│   └── data_generator.py
+│
 ├── ingestion/
+│   └── bronze_ingestion.py
+│
 ├── transformation/
+│   ├── feature_engineering.py
+│   └── silver_to_gold.py
+│
 ├── loading/
+│   └── load_to_snowflake.py
+│
 ├── jars/
+│
 ├── notebooks/
+│
 ├── data/
+│
 ├── docker-compose.yml
+│
 └── README.md
 ```
 
