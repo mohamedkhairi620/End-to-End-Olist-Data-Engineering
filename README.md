@@ -1,45 +1,49 @@
 # Big Data ETL Pipeline using Spark, Hadoop, Airflow, and Snowflake
 
-## Overview
+This project demonstrates an end-to-end Big Data ETL Pipeline for processing large-scale e-commerce data using modern Data Engineering tools.
 
-This project is a complete Big Data ETL pipeline designed to process large-scale e-commerce data using modern data engineering tools and technologies.
-
-The pipeline follows a multi-layer architecture (Bronze, Silver, Gold) and automates the entire workflow using Apache Airflow. Data is processed with Apache Spark, stored in Hadoop HDFS, and finally loaded into Snowflake for analytics and reporting.
-
-The project demonstrates practical implementation of:
-
-- Distributed data processing
-- Data lake architecture
-- ETL orchestration
-- Cloud data warehousing
-- Scalable big data systems
+The pipeline automates the complete workflow from raw JSON ingestion to cloud data warehousing using a Medallion Architecture (Bronze, Silver, Gold).
 
 ---
 
 # System Architecture
 
-```text
-Raw JSON Data
-       │
-       ▼
-Bronze Layer (HDFS)
-       │
-       ▼
-Silver Layer (Feature Engineering)
-       │
-       ▼
-Gold Layer (Star Schema)
-       │
-       ▼
-Snowflake Data Warehouse
-       │
-       ▼
-Analytics & BI
-```
+The pipeline follows a scalable Lakehouse Architecture divided into multiple layers:
+
+### Data Ingestion (Bronze Layer)
+Raw JSON files are ingested into Hadoop HDFS using Apache Spark.
+
+### Data Processing (Silver Layer)
+PySpark performs data cleaning, preprocessing, and feature engineering.
+
+### Data Modeling (Gold Layer)
+The processed data is transformed into a Star Schema model (Fact & Dimension tables) and stored as Parquet files.
+
+### Cloud Loading
+Final analytical tables are loaded into Snowflake Cloud Data Warehouse using the Spark Snowflake Connector.
+
+### Workflow Orchestration
+Apache Airflow automates and schedules the entire ETL pipeline.
 
 ---
 
-# Technologies Used
+# Data Modeling (Star Schema)
+
+The project uses a Star Schema optimized for analytical queries.
+
+## Fact Table
+
+- FACT_ORDERS
+
+## Dimension Tables
+
+- DIM_CUSTOMER
+- DIM_PRODUCT
+- DIM_TIME
+
+---
+
+# Tech Stack
 
 | Technology | Purpose |
 |---|---|
@@ -54,399 +58,82 @@ Analytics & BI
 
 ---
 
+# Pipeline Workflow
+
+```text
+Raw JSON Data
+      │
+      ▼
+Bronze Layer (HDFS)
+      │
+      ▼
+Silver Layer (Feature Engineering)
+      │
+      ▼
+Gold Layer (Star Schema)
+      │
+      ▼
+Snowflake Data Warehouse
+```
+
+---
+
+# Airflow DAG Workflow
+
+The pipeline is orchestrated using Apache Airflow with the following tasks:
+
+1. Bronze Ingestion
+2. Feature Engineering
+3. Silver to Gold Transformation
+4. Load to Snowflake
+5. Data Quality Validation
+
+---
+
 # Project Structure
 
 ```bash
-Final_Project_bigData/
+project-root/
 │
 ├── dags/
-│   └── olist_data_pipeline.py
-│
 ├── ingestion/
-│   └── bronze_ingestion.py
-│
 ├── transformation/
-│   ├── feature_engineering.py
-│   └── silver_to_gold.py
-│
 ├── loading/
-│   └── load_to_snowflake.py
-│
-├── notebooks/
-│
 ├── jars/
-│   ├── spark-snowflake_2.12-2.11.0.jar
-│   └── snowflake-jdbc-3.13.33.jar
-│
+├── notebooks/
 ├── data/
-│
-├── logs/
-│
-├── plugins/
-│
-├── config/
-│
 ├── docker-compose.yml
-│
 └── README.md
 ```
 
 ---
 
-# Data Pipeline Layers
+# Final Validation
 
-## 1. Bronze Layer
+## Execution Status
+- All Airflow tasks completed successfully.
+- Spark jobs executed successfully on YARN.
 
-The Bronze layer stores raw ingested data directly from JSON files into Hadoop HDFS.
-
-### Responsibilities
-
-- Raw data ingestion
-- Schema preservation
-- Initial storage in HDFS
-- Immutable raw storage
-
-### Script
-
-```bash
-ingestion/bronze_ingestion.py
-```
+## Data Validation
+- Data successfully stored in HDFS.
+- Gold Layer tables successfully loaded into Snowflake.
+- Data quality checks completed successfully.
 
 ---
 
-## 2. Silver Layer
+# Execution Screenshots
 
-The Silver layer performs data cleaning and feature engineering.
+## 1. Airflow DAG Execution
+Successful execution of the ETL workflow.
 
-### Responsibilities
+## 2. Hadoop & YARN Monitoring
+Validation of Spark job execution on the cluster.
 
-- Handle missing values
-- Data type conversion
-- Feature engineering
-- Data standardization
-- Data validation
+## 3. HDFS Storage
+Verification of Bronze, Silver, and Gold layer storage.
 
-### Script
-
-```bash
-transformation/feature_engineering.py
-```
-
----
-
-## 3. Gold Layer
-
-The Gold layer transforms the cleaned data into analytical tables using Star Schema modeling.
-
-### Responsibilities
-
-- Build fact tables
-- Build dimension tables
-- Create analytical models
-- Optimize for BI and reporting
-
-### Script
-
-```bash
-transformation/silver_to_gold.py
-```
-
----
-
-# Snowflake Integration
-
-The final Gold layer tables are loaded into Snowflake for cloud analytics and reporting.
-
----
-
-# Snowflake Warehouse Setup
-
-```sql
-CREATE WAREHOUSE IF NOT EXISTS OLIST_WH
-WITH WAREHOUSE_SIZE = 'X-SMALL'
-AUTO_SUSPEND = 300
-AUTO_RESUME = TRUE;
-```
-
----
-
-# Create Database and Schema
-
-```sql
-CREATE DATABASE IF NOT EXISTS OLIST_DB;
-
-CREATE SCHEMA IF NOT EXISTS OLIST_DB.GOLD_LAYER;
-```
-
----
-
-# Snowflake Tables
-
-## Dimension Tables
-
-| Table | Description |
-|---|---|
-| DIM_CUSTOMER | Customer information |
-| DIM_PRODUCT | Product details |
-| DIM_TIME | Date and time dimension |
-
----
-
-## Fact Tables
-
-| Table | Description |
-|---|---|
-| FACT_ORDERS | Main transactional fact table |
-
----
-
-# Airflow Orchestration
-
-Apache Airflow is used to automate and schedule the entire ETL pipeline.
-
----
-
-# DAG Workflow
-
-```text
-Bronze Ingestion
-        │
-        ▼
-Feature Engineering
-        │
-        ▼
-Silver to Gold
-        │
-        ▼
-Load to Snowflake
-        │
-        ▼
-Data Quality Check
-```
-
----
-
-# Airflow Tasks
-
-| Task ID | Description |
-|---|---|
-| bronze_ingestion | Load raw JSON data into HDFS |
-| feature_engineering | Clean and transform data |
-| silver_to_gold | Build Gold analytical tables |
-| load_to_snowflake | Load tables into Snowflake |
-| check_data_quality | Validate null values |
-
----
-
-# Docker Environment
-
-The entire project runs inside Docker containers.
-
----
-
-# Main Services
-
-| Service | Port |
-|---|---|
-| Airflow Webserver | 18080 |
-| Jupyter Notebook | 8899 |
-| Hadoop NameNode | 9870 |
-| YARN Resource Manager | 8088 |
-| Spark UI | 4040 |
-
----
-
-# Running the Project
-
-## 1. Start Containers
-
-```bash
-docker compose up -d
-```
-
----
-
-# Verify Running Containers
-
-```bash
-docker ps
-```
-
----
-
-# Access Services
-
-## Airflow
-
-```text
-http://localhost:18080
-```
-
-Default credentials:
-
-```text
-Username: airflow
-Password: airflow
-```
-
----
-
-## Jupyter Notebook
-
-```text
-http://localhost:8899
-```
-
----
-
-## Hadoop NameNode
-
-```text
-http://localhost:9870
-```
-
----
-
-# Upload Data to HDFS
-
-## Copy JSON Files
-
-```bash
-docker cp ./streaming/. hadoop-namenode:/tmp/streaming
-```
-
----
-
-## Open Hadoop Container
-
-```bash
-docker exec -it hadoop-namenode bash
-```
-
----
-
-## Create HDFS Directory
-
-```bash
-hdfs dfs -mkdir -p /user/root/datalake/streaming
-```
-
----
-
-## Upload Files to HDFS
-
-```bash
-hdfs dfs -put /tmp/streaming/*.json /user/root/datalake/streaming/
-```
-
----
-
-## Verify Uploaded Files
-
-```bash
-hdfs dfs -ls /user/root/datalake/streaming
-```
-
----
-
-# Running Spark Jobs
-
-## Bronze Ingestion
-
-```bash
-spark-submit /home/jovyan/work/ingestion/bronze_ingestion.py
-```
-
----
-
-## Feature Engineering
-
-```bash
-spark-submit /home/jovyan/work/transformation/feature_engineering.py
-```
-
----
-
-## Gold Layer Creation
-
-```bash
-spark-submit /home/jovyan/work/transformation/silver_to_gold.py
-```
-
----
-
-# Loading Data into Snowflake
-
-```bash
-spark-submit \
---jars /home/jovyan/work/jars/spark-snowflake_2.12-2.11.0.jar,/home/jovyan/work/jars/snowflake-jdbc-3.13.33.jar \
-/home/jovyan/work/loading/load_to_snowflake.py
-```
-
----
-
-# Data Quality Validation
-
-The pipeline performs automated data quality checks after loading data.
-
-## Validation Rules
-
-- Check null values
-- Validate schema consistency
-- Verify table creation
-- Validate successful loading
-
----
-
-# Example Data Quality Output
-
-```text
-================ DATA QUALITY REPORT ================
-
-Table: dim_customer
-No null values found
-
-Table: fact_orders
-customer_id -> 3 null values
-```
-
----
-
-# Key Features
-
-- Distributed ETL processing using Spark
-- Hadoop-based Data Lake
-- Automated workflows using Airflow
-- Star Schema modeling
-- Snowflake cloud integration
-- Scalable architecture
-- Dockerized environment
-- Data quality validation
-- Incremental data loading
-
----
-
-# Future Improvements
-
-- Add Kafka for real-time streaming
-- Add CI/CD pipeline
-- Add monitoring and alerting
-- Add unit and integration tests
-- Add Power BI dashboards
-- Add Spark Structured Streaming
-- Add Delta Lake support
-
----
-
-# Challenges Solved
-
-- Distributed processing configuration
-- HDFS integration
-- Spark-YARN connectivity
-- Snowflake Spark connector setup
-- Airflow orchestration
-- Docker networking
-- Incremental loading strategy
+## 4. Snowflake Validation
+Final verification of loaded analytical tables in Snowflake.
 
 ---
 
@@ -455,14 +142,4 @@ customer_id -> 3 null values
 ## Mohamed Khairy
 
 Computer Science Student  
-Interested in:
-- Data Engineering
-- Machine Learning
-- Big Data Systems
-- Cloud Computing
-
----
-
-# License
-
-This project is for educational and portfolio purposes.
+Interested in Data Engineering, Machine Learning, and Big Data Systems.
