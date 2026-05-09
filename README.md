@@ -7,7 +7,15 @@ The pipeline automates the complete workflow from data generation to cloud data 
 ---
 
 # System Architecture
-![Description](Media/System Architecture.png)
+
+
+![System Architecture](Media/System%20Architecture.png)
+
+# Star Schema
+
+![Star Schema](Media/Star_Schema.png)
+
+The pipeline follows a scalable Lakehouse Architecture divided into multiple layers:
 
 The pipeline follows a scalable Lakehouse Architecture divided into multiple layers:
 
