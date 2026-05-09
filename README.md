@@ -17,7 +17,7 @@ The pipeline automates the complete workflow from data generation to cloud data 
 
 The pipeline follows a scalable Lakehouse Architecture divided into multiple layers:
 
-The pipeline follows a scalable Lakehouse Architecture divided into multiple layers:
+
 
 ### Data Generation
 A Python-based simulator generates mock e-commerce transaction data in JSON format.
