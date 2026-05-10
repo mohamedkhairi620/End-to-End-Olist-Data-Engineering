@@ -155,23 +155,23 @@ project-root/
 
 ## 1. Airflow DAG Execution
 Successful execution of the ETL workflow.
-![System Architecture](Media/System%20Architecture.png)
+![System Architecture](Media/Dags_Result.png)
 
 
 
 ## 2. Hadoop & YARN Monitoring
 Validation of Spark job execution on the cluster.
-![System Architecture](Media/System%20Architecture.png)
+![System Architecture](Media/hadoop.png)
 
 
 ## 3. HDFS Storage
 Verification of Bronze, Silver, and Gold layer storage.
-![System Architecture](Media/System%20Architecture.png)
+![System Architecture](Media/Hdfs_DataLake.png)
 
 
 ## 4. Snowflake Validation
 Final verification of loaded analytical tables in Snowflake.
-![System Architecture](Media/System%20Architecture.png)
+![System Architecture](Media/Snowflake_Data.png)
 
 
 ---
