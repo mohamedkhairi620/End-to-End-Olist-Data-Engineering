@@ -101,7 +101,7 @@ The pipeline is orchestrated using Apache Airflow with the following tasks:
 2. Feature Engineering
 3. Silver to Gold Transformation
 4. Load to Snowflake
-5. Data Quality Validation
+
 
 ---
 
@@ -155,15 +155,24 @@ project-root/
 
 ## 1. Airflow DAG Execution
 Successful execution of the ETL workflow.
+![System Architecture](Media/System%20Architecture.png)
+
+
 
 ## 2. Hadoop & YARN Monitoring
 Validation of Spark job execution on the cluster.
+![System Architecture](Media/System%20Architecture.png)
+
 
 ## 3. HDFS Storage
 Verification of Bronze, Silver, and Gold layer storage.
+![System Architecture](Media/System%20Architecture.png)
+
 
 ## 4. Snowflake Validation
 Final verification of loaded analytical tables in Snowflake.
+![System Architecture](Media/System%20Architecture.png)
+
 
 ---
 
